@@ -42,12 +42,28 @@
 				<!-- Product Image -->
 				<div class="col-lg-6">
 					<div class="details_image">
-						<div class="details_image_large"><img src="/images/details_1.jpg" alt=""><div class="product_extra product_new"><a href="categories.html">New</a></div></div>
+                        @php						
+							$image = '';
+							if(count($item->images)>0) {
+								$image = $item->images[0]['img'];
+							}else {
+								$image = 'no_image.jpg';
+							}
+						@endphp
+						<div class="details_image_large"><img src="/images/{{$image}}" alt="{{$item->title}}"><div class="product_extra product_new"><a href="categories.html">New</a></div></div>
 						<div class="details_image_thumbnails d-flex flex-row align-items-start justify-content-between">
-							<div class="details_image_thumbnail active" data-image="/images/details_1.jpg"><img src="/images/details_1.jpg" alt=""></div>
-							<div class="details_image_thumbnail" data-image="/images/details_2.jpg"><img src="/images/details_2.jpg" alt=""></div>
-							<div class="details_image_thumbnail" data-image="/images/details_3.jpg"><img src="/images/details_3.jpg" alt=""></div>
-							<div class="details_image_thumbnail" data-image="/images/details_4.jpg"><img src="/images/details_4.jpg" alt=""></div>
+                            @if($image == 'no_image.jpg')                            
+							    
+                            @else
+                                @foreach ($item->images as $img)
+                                    @if ($loop->first)
+                                        <div class="details_image_thumbnail active" data-image="/images/{{$img['img']}}"><img src="/images/{{$img['img']}}" alt="{{$item->title}}"></div>							     
+                                    @else
+                                    <div class="details_image_thumbnail" data-image="/images/{{$img['img']}}"><img src="/images/{{$img['img']}}" alt="{{$item->title}}"></div>							     
+                                    @endif
+                                @endforeach                                   
+                                
+                            @endif
 						</div>
 					</div>
 				</div>
@@ -71,14 +87,15 @@
                             @if($item->in_stock)
 							 <span>In Stock</span>
                             @else
-                             <span>Out of Stock</span>
+                             <span style="color:red">Out of Stock</span>
                             @endif
 						</div>
 						<div class="details_text">
-							<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. Phasellus id nisi quis justo tempus mollis sed et dui. In hac habitasse platea dictumst. Suspendisse ultrices mauris diam. Nullam sed aliquet elit. Mauris consequat nisi ut mauris efficitur lacinia.</p>
+							<p>{{$item->description}}</p>
 						</div>
 
 						<!-- Product Quantity -->
+                        @if($item->in_stock)
 						<div class="product_quantity_container">
 							<div class="product_quantity clearfix">
 								<span>Qty</span>
@@ -90,6 +107,7 @@
 							</div>
 							<div class="button cart_button"><a href="#">Add to cart</a></div>
 						</div>
+                        @endif
 
 						<!-- Share -->
 						<div class="details_share">
@@ -112,7 +130,7 @@
 						<div class="reviews_title"><a href="#">Reviews <span>(1)</span></a></div>
 					</div>
 					<div class="description_text">
-						<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. Phasellus id nisi quis justo tempus mollis sed et dui. In hac habitasse platea dictumst. Suspendisse ultrices mauris diam. Nullam sed aliquet elit. Mauris consequat nisi ut mauris efficitur lacinia.</p>
+						<p>{{$item->description}}</p>
 					</div>
 				</div>
 			</div>
