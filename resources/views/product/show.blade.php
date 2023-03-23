@@ -55,9 +55,15 @@
 				<!-- Product Content -->
 				<div class="col-lg-6">
 					<div class="details_content">
-						<div class="details_name">Smart Phone</div>
-						<div class="details_discount">$890</div>
-						<div class="details_price">$670</div>
+                        <div class="details_name">{{$item->title}}</div>
+                        @if($item->new_price !=null) 
+										<div class="details_discount">${{$item->price}}</div>
+										<div class="details_price">${{$item->new_price}}</div>
+									@else
+										<div class="details_price">${{$item->price}}</div>
+									@endif
+						
+						
 
 						<!-- In Stock -->
 						<div class="in_stock_container">
