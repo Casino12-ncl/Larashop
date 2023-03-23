@@ -133,11 +133,17 @@
 				<div class="col">					
 					<div class="product_grid">
 						@foreach ($products as $product)
-							
-						
+						@php						
+							$image = '';
+							if(count($product->images)>0) {
+								$image = $product->images[0]['img'];
+							}else {
+								$image = 'no_image.jpg';
+							}
+						@endphp
 						<!-- Product -->
 							<div class="product">
-								<div class="product_image"><img src="images/product_1.jpg" alt=""></div>
+								<div class="product_image"><img src="/images/{{$image}}" alt="{{$product->title}}"></div>
 								<div class="product_extra product_new"><a href="categories.html">New</a></div>
 								<div class="product_content">
 									<div class="product_title"><a href="product.html">{{$product->title}}</a></div>
