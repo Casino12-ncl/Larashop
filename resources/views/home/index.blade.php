@@ -133,14 +133,14 @@
 				<div class="col">					
 					<div class="product_grid">
 						@foreach ($products as $product)
-						@php						
-							$image = '';
-							if(count($product->images)>0) {
-								$image = $product->images[0]['img'];
-							}else {
-								$image = 'no_image.jpg';
-							}
-						@endphp
+							@php						
+								$image = '';
+								if(count($product->images)>0) {
+									$image = $product->images[0]['img'];
+								}else {
+									$image = 'no_image.jpg';
+								}
+							@endphp
 						<!-- Product -->
 							<div class="product">
 								<div class="product_image"><img src="/images/{{$image}}" alt="{{$product->title}}"></div>
