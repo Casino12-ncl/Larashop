@@ -7,9 +7,9 @@
     <link rel="stylesheet" type="text/css" href="/styles/categories_responsive.css">
 @endsection
 
-@section('custom_js')
-    <script src="/js/categories.js"></script>
-@endsection
+
+    
+
 
 @section('content')
     <div class="home">
@@ -44,9 +44,12 @@
                                         <span class="sorting_text">Sort by</span>
                                         <i class="fa fa-chevron-down" aria-hidden="true"></i>
                                         <ul>
-                                            <li class="product_sorting_btn" data-isotope-option='{ "sortBy": "original-order" }'><span>Default</span></li>
-                                            <li class="product_sorting_btn" data-isotope-option='{ "sortBy": "price" }'><span>Price</span></li>
-                                            <li class="product_sorting_btn" data-isotope-option='{ "sortBy": "stars" }'><span>Name</span></li>
+                                            <li class="product_sorting_btn" data-order="default"><span>Default</span></li>
+                                            <li class="product_sorting_btn" data-order="price-low-high"><span>Price: Low-High</span></li>
+                                            <li class="product_sorting_btn" data-order="price-high-low"><span>Price: High-Low</span></li>
+                                            <li class="product_sorting_btn" data-order="name-A-Z"><span>Name: A-Z</span></li>
+                                            <li class="product_sorting_btn" data-order="name-Z-A"><span>Name: Z-A</span></li>
+                                            
                                         </ul>
                                     </li>
                                 </ul>
@@ -61,7 +64,7 @@
                     <div class="product_grid">
 
                         <!-- Product -->
-                        @foreach ($cat->products as $product)
+                        @foreach ($products as $product)
 							@php						
 								$image = '';
 								if(count($product->images)>0) {
@@ -169,4 +172,50 @@
         </div>
     </div>
 @endsection
+@section('custom_js')
 
+   
+    <script>
+        $(document).ready(function () {
+            $('.product_sorting_btn').click(function (){
+                let orderBy = $(this).data('order')
+                $('.sorting_text').text($(this).find('span').text())
+                $.ajax({
+                    url: "{{route('showCategory', $cat->alias)}}",
+                    Type: "Get",
+                    data: {
+                        orderBy: orderBy
+                    },
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: (data) => {
+                        let positionParameters = location.pathname.indexOf('?');
+                        let url = location.pathname.substring(positionParameters,location.pathname.length);
+                        let newURL = url + '?';
+                        newURL += 'orderBy=' + orderBy; 
+                        history.pushState({}, '', newURL);
+                        $('.product_grid').html(data)
+
+                        $('.product_grid').isotope('destroy')
+                        $('.product_grid').imagesLoaded( function() {
+                            let grid = $('.product_grid').isotope({
+                                itemSelector: '.product',
+                                layoutMode: 'fitRows',
+                                fitRows:
+                                    {
+                                        gutter: 30
+                                    }
+                            });
+                        });
+
+                    }
+                    
+                });
+            })
+
+        })
+
+
+    </script>
+@endsection
