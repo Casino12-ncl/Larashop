@@ -90,14 +90,7 @@
 						@endforeach
 
                     </div>
-                    <div class="product_pagination">
-                        <ul>
-                            <li class="active"><a href="#">01.</a></li>
-                            <li><a href="#">02.</a></li>
-                            <li><a href="#">03.</a></li>
-                        </ul>
-                    </div>
-                        
+                    {{$products->appends(request()->query())->links('pagination.index')}}  
                 </div>
             </div>
         </div>
@@ -184,7 +177,8 @@
                     url: "{{route('showCategory', $cat->alias)}}",
                     Type: "Get",
                     data: {
-                        orderBy: orderBy
+                        orderBy: orderBy,
+                        page: {{isset($_GET['page']) ? $_GET['page'] : 1}},                       
                     },
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -192,11 +186,14 @@
                     success: (data) => {
                         let positionParameters = location.pathname.indexOf('?');
                         let url = location.pathname.substring(positionParameters,location.pathname.length);
-                        let newURL = url + '?';
-                        newURL += 'orderBy=' + orderBy; 
+                        let newURL = url + '?'; // http://127.0.0.1:8001/phones?
+                        newURL += "&page={{isset($_GET['page']) ? $_GET['page'] : 1}}"+'orderBy=' + orderBy; // http://127.0.0.1:8001/phones?orderBy=name-z-a
                         history.pushState({}, '', newURL);
+                        $('.product_pagination a').each(function(index, value){
+                            let link= $(this).attr('href')
+                            $(this).attr('href',link+'&orderBy='+orderBy)
+                        })
                         $('.product_grid').html(data)
-
                         $('.product_grid').isotope('destroy')
                         $('.product_grid').imagesLoaded( function() {
                             let grid = $('.product_grid').isotope({
@@ -208,7 +205,6 @@
                                     }
                             });
                         });
-
                     }
                     
                 });
