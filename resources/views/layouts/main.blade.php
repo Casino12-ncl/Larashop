@@ -1,5 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
+@php
+	if(!isset($_COOKIE['cart_id'])) setcookie('cart_id', uniqid());	
+@endphp 
 <head>
 <title>@yield('title')</title>
 <meta charset="utf-8">
@@ -59,7 +62,7 @@
 													c0,7.5,6,13.5,13.5,13.5s13.5-6,13.5-13.5v-41h45.2l26.9,302.3C412.8,445.2,392.1,462,366.8,462z"/>
 											</g>
 										</svg>
-										<div>Cart <span>(0)</span></div>
+										<div>Cart (<span class="cart-qty">{{isset($_COOKIE['cart_id']) ? \Cart::session($_COOKIE['cart_id'])->getTotalQuantity() : 0}}</span>)</div>
 									</a>
 								</div>
 								<div class="search">
