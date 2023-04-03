@@ -9,6 +9,34 @@
 
 @section('custom_js')
     <script src="/js/product.js"></script>
+	<script>
+		$(document).ready(function(){
+			$('.cart_button').click(function(){
+				addToCart();
+			})
+
+		})
+		
+		
+		function addToCart(){
+			$.ajax({
+                    url: "{{route('addToCart')}}",
+                    Type: "POST",
+                    data: {
+                        id: 'ghjdthrf',              
+                    },
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: (data) => {
+                        console.log(data)
+                    }
+                    
+                });
+		}
+	</script>
+	
+
 @endsection
 
 @section('content')
